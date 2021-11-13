@@ -15,3 +15,32 @@ resource "aws_instance" "ubuntu-server" {
     }
   
 }
+
+# Create a VPC 
+
+resource "aws_vpc" "vpc_prod" {
+    cidr_block = "192.168.0.0/16"
+    tags = {
+      Name = "production_vpc"
+    }
+}
+
+#Creating two subnets within our vpc
+
+resource "aws_subnet" "subnet-01" {
+    vpc_id = aws_vpc.vpc_prod.id # taking the id from the vpc after its creation
+    cidr_block = "192.168.1.0/24"
+
+    tags = {
+      Name = "Production-subnet"
+    }
+}
+
+resource "aws_subnet" "subnet-02" {
+    vpc_id = aws_vpc.vpc_prod.id
+    cidr_block = "192.168.2.0/24"
+
+    tags = {
+      Name = "test-subnet"
+    }
+}
