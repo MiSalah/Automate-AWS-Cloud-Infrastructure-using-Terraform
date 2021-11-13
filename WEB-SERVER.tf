@@ -5,7 +5,23 @@ provider "aws" {
     secret_key = "$secret_key"
 }
 
+
 # 1. Create a VPC
+resource "aws_vpc" "Production_VPC" {
+    cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "Production VPC"
+  }
+}
+
+# 2. Create Internet Gateway
+resource "aws_internet_gateway" "Internet_Gatewey" {
+    vpc_id = aws_vpc.Production_VPC.id
+    tags = {
+      Name = "VPC Gateway"
+    }
+}
+
 # 2. Create Internet Gateway
 # 3. Create Custom Route Table
 # 4. Create a Subnet
