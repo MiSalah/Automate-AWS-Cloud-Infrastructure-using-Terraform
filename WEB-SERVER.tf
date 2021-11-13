@@ -111,5 +111,15 @@ resource "aws_network_interface" "web_server_NIC" {
 }
 
 # 8. Assign an elastic ip address to the network interface created in step 7
+
+resource "aws_eip" "elastic_ip" {
+    vpc         = true
+    network_interface = aws_network_interface.web_server_NIC.id
+    associate_with_private_ip = "10.0.1.50"
+    
+    depends_on = [
+      aws_internet_gateway.Internet_Gatewey
+    ]
+}
 # 9. Create ubuntu server and install & enable apache2
 
