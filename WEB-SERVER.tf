@@ -101,7 +101,15 @@ resource "aws_security_group" "Allow_web" {
       Name = "Inbound web traffic to our web server"
     }
 }
+
 # 7. Create a network Interface with an ip address in the subnet that was created in step 4
+
+resource "aws_network_interface" "web_server_NIC" {
+    subnet_id = aws_subnet.Production_Subnet.id
+    private_ips = [ "10.0.1.50" ]
+    security_groups = [aws_security_group.Allow_web.id]
+}
+
 # 8. Assign an elastic ip address to the network interface created in step 7
 # 9. Create ubuntu server and install & enable apache2
 
