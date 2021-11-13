@@ -121,5 +121,32 @@ resource "aws_eip" "elastic_ip" {
       aws_internet_gateway.Internet_Gatewey
     ]
 }
+
 # 9. Create ubuntu server and install & enable apache2
+
+resource "aws_instance" "ubuntu_web_server" {
+    ami = "ami-083654bd07b5da81d"
+    instance_type = t2.micro
+    availability_zone = us-east-1a
+    key_name = "my-key"
+
+    network_interface {
+      device_index = 0
+      network_interface_id = aws_network_interface.web_server_NIC
+    }
+
+    user_data = <<-EOF
+                #!/bin/bash
+                sudo apt get update -y
+                sudo install apache2 -y
+                sudo systemctl start apache2
+                sudo bash -c 'echo A Web Server established using Terraform > /var/www/html/index.html'
+                EOF
+    
+    tags = {
+      Name = "Ubuntu Apache Web-server "
+    }
+
+}
+
 
