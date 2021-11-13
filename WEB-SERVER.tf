@@ -60,7 +60,47 @@ resource "aws_route_table_association" "Subnet_route_table" {
   
 }
 
-# 6. Create Security Group to enable 22, 80, 443 ports (ssh,http,https)
+# 6. Create Security Groups to enable 22, 80, 443 ports (ssh,http,https)
+
+resource "aws_security_group" "Allow_web" {
+    name = "allow_web_traffic"
+    description = "Allow inbound traffic for ssh, http, https" 
+    vpc_id = aws_vpc.Production_VPC.id
+
+    ingress {
+        description = "allow http traffic"
+        from_port = 80
+        to_port = 80
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+  
+    ingress {
+        description = "allow https traffic"
+        from_port = 443
+        to_port = 443
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        description = "allow ssh"
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    tags = {
+      Name = "Inbound web traffic to our web server"
+    }
+}
 # 7. Create a network Interface with an ip address in the subnet that was created in step 4
 # 8. Assign an elastic ip address to the network interface created in step 7
 # 9. Create ubuntu server and install & enable apache2
