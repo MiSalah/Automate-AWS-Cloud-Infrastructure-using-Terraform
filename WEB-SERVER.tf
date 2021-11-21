@@ -149,4 +149,12 @@ resource "aws_instance" "ubuntu_web_server" {
 
 }
 
+# automatically output the web server public ip address once we apply < terraform apply >
+
+output "Server Public IP" {
+
+  value = aws_eip.elastic_ip.private_ip 
+  
+}
+
 
